@@ -1,14 +1,19 @@
-BINS = park clarke
-
 CC = clang
 CFLAGS = -Wall -Wextra -std=c11
+LDLIBS = -lm
 
-all: $(BINS)
+BIN = test_algorithms
+OBJS = algorithms.o test_algorithms.o
 
-%: %.c
-	$(CC) $(CFLAGS) -o $@ $<
+all: $(BIN)
+
+$(BIN): $(OBJS)
+	$(CC) -o $@ $^ $(LDLIBS)
+
+%.o: %.c algorithms.h
+	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm -f $(BINS)
+	rm -f $(BIN) $(OBJS)
 
 .PHONY: all clean
