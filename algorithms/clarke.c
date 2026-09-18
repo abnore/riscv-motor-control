@@ -1,11 +1,7 @@
 #include <stdio.h>
+#include "common.h"
 /* Two version, vector-magnitude and power analysis. 2/3 and sqrt(2/3), This
  * is a small program for the first one */
-
-typedef struct {
-    float a;
-    float b;
-} ab_vector;
 
 #define SQRT3 1.73205080757f
 #define CLARKE_CONST (1.0f/SQRT3)
