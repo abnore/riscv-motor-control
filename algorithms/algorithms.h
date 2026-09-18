@@ -9,13 +9,15 @@
 #define PHASE_120_F  (2.f * PI_F / 3.f)
 
 // Struct for holding the alpha/beta vectors that clarke transform creates
-// from the 3 currents of a Wye configuration. Also inverse park
+// from the 3 phases rotatin domain into the 2 phase rotating domain.
+// Also inverse park transform creates this.
 typedef struct {
     float a;
     float b;
 } ab_vector;
 
-// Struct for holding the D and Q vectors for the park transform
+// Struct for holding the D and Q vectors in the stationary domain that is
+// created by the park transform
 typedef struct {
     float d;
     float q;
