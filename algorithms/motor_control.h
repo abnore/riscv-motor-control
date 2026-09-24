@@ -2,9 +2,17 @@
 #define MOTOR_CTRL_H
 
 #include <math.h>
-
 // math.h defines PI as a double, i will keep everything 32 bit
-#define PI_F         ((float)M_PI)
+#ifndef M_PI
+    #define PI_F 3.14159265358979323846f
+#else
+    #define PI_F ((float)M_PI)
+#endif
+/* Due to this error on linux, i have the full PI_F declared like this
+   motor_control.h:7:30: error: ‘M_PI’ undeclared (first use in this function)
+   7 | #define PI_F         ((float)M_PI)
+*/
+
 #define DEG_TO_RAD_F (PI_F / 180.f)
 #define PHASE_120_F  (2.f * PI_F / 3.f)
 
