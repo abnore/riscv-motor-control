@@ -1,9 +1,13 @@
-CC = clang
 CFLAGS = -Wall -Wextra -std=c11
+LDLIBS :=
+ifeq ($(shell uname -s),Linux)
+	LDLIBS += -lm
+endif
 
 BIN = test_algorithms
 CFILES := $(wildcard *.c)
 OBJS := $(filter-out test_%.c, $(CFILES:.c=.o))
+
 
 all: $(BIN)
 
