@@ -1,18 +1,20 @@
 #include <math.h>
 #include <stdio.h>
-#include "algorithms.h"
+#include "motor_control.h"
+
 
 /* A test program for the clark/park transform on a motor with 120deg phase
  * split in a 3 phase system. */
 
 int main(void)
 {
+    FILE *fp = fopen("output.log", "w");
 
     float current_peak = 10.f; // in mA or uA, whatever
     float current_offset = PI_F / 2.f; // gives a 90deg offset dq=0,10
     // float current_offset = PI_F / 4.f; // gives a 45deg offset dq=7.071,7.071
 
-    printf("angle      iA       iB       iC       a       b        sum       d       q     |    a'       b'\n");
+    fprintf(fp,"angle      iA       iB       iC       a       b        sum       d       q     |    a'       b'\n");
 
     /* Looping over a full spin, 30 degrees at a time, checking the transforms
      * for each step. iA + iB + iC should = 0, and d and q should be constant
@@ -34,7 +36,7 @@ int main(void)
         dq_vector dq = park_transform(rotor_angle, ab);
         ab_vector reconstructed = inverse_park_transform(rotor_angle, dq);
 
-        printf("%3d°  %8.3f %8.3f %8.3f %8.3f %8.3f %8.3f %8.3f %8.3f  |%8.3f %8.3f\n",
+        fprintf(fp,"%3d°  %8.3f %8.3f %8.3f %8.3f %8.3f %8.3f %8.3f %8.3f  |%8.3f %8.3f\n",
                degrees,
                i_a, i_b, i_c,
                ab.a, ab.b,
@@ -42,7 +44,6 @@ int main(void)
                dq.d, dq.q,
                reconstructed.a, reconstructed.b);
     }
-
     /* This test prints out the following:
 
        angle      iA       iB       iC       a       b        sum       d       q     |    a'       b'
@@ -71,5 +72,36 @@ int main(void)
        330°     5.000    5.000  -10.000    5.000    8.660   -0.000   -0.000   10.000  |   5.000    8.660
        345°     2.588    7.071   -9.659    2.588    9.659   -0.000   -0.000   10.000  |   2.588    9.659
     */
+
+    // Now let us test the PI update function
+    const float resistance = 1.0f;    // ohms
+    const float inductance = 0.01f;   // henries
+    const float dt = 0.0001f;         // 100 microseconds
+
+    float current = 0.0f;
+
+    PI_control pi = {
+        .kp = 1.0f,
+        .ki = 100.0f,
+        .integral = 0.0f,
+        .error = 0.0f,
+        .out_min = -5.0f,            // volts
+        .out_max = 5.0f
+    };
+
+
+    fprintf(fp,"\ntime,target,current,voltage,integral\n");
+    for (int step = 0; step < 2000; ++step) {
+        float target = (step < 1000) ? 10.0f : 2.0f;
+
+        float voltage = pi_update(&pi, target, current, dt);
+
+        current += (voltage - resistance * current) * dt / inductance;
+
+        fprintf(fp, "%.4f,%.4f,%.4f,%.4f,%.4f\n",
+                (step + 1) * dt, target, current, voltage, pi.integral);
+    }
+
+    fclose(fp);
     return 0;
 }

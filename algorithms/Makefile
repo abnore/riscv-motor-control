@@ -1,9 +1,9 @@
 CC = clang
 CFLAGS = -Wall -Wextra -std=c11
-LDLIBS = -lm
 
 BIN = test_algorithms
-OBJS = algorithms.o test_algorithms.o
+CFILES := $(wildcard *.c)
+OBJS := $(filter-out test_%.c, $(CFILES:.c=.o))
 
 all: $(BIN)
 

@@ -1,5 +1,5 @@
 #include <math.h>
-#include "algorithms.h"
+#include "motor_control.h"
 
 #define SQRT3 1.73205080757f
 #define CLARKE_CONST (1.0f/SQRT3)
