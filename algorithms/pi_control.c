@@ -10,6 +10,25 @@
  * each controller will regulate one current component after park, d or q.
  * The measured will be the actual d/q currents gotten through Clarke and Park.
  * Each controller will then outputs voltage
+ *
+ * From the TI library:
+ *  Tuning the P+I controller
+ *  A suggested general technique for tuning the controller is now described.
+ *
+ *      Step 1. Ensure integral is set to zero and proportional gain set to
+ *              one.
+ *      Step 2. Gradually adjust proportional gain variable (Kp) while
+ *              observing the step response to achieve optimum rise time and
+ *              overshoot compromise.
+ *      Step 3. If necessary, gradually increase integral gain (Ki) to optimize
+ *              the return of the steady state output to nominal. The
+ *              controller will be very sensitive to this term and may become
+ *              unstable so be sure to start with a very small number. Integral
+ *              gain will result in an increase in overshoot and oscillation,
+ *              so it may be necessary to slightly decrease the Kp term again
+ *              to find the best balance. Note that if the integral gain is
+ *              used then set to zero, a small residual term may persist in ui
+ *
  */
 float pi_update(PI_control *PI, float target, float measured, float dt)
 {
