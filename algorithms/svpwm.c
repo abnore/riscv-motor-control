@@ -1,6 +1,15 @@
 #include "motor_control.h"
-
-/* Space vector PWM implementation, based on these sources:
+/*
+ * https://www.ecpe.org/infocentre/ecpe-online-course/dcac/space-vector-modulation/
+ * https://www.mathworks.com/discovery/space-vector-modulation.html
+ *
+ * Space Vector Modulation is the industry standard and maximizes DC bus voltage
+ * utilization, allowing a higher achievable output voltage for the same DC link
+ * compared with sinusoidal pulse width modulation (SPWM).
+ *
+ * https://www.youtube.com/shorts/RWYun84ULWo
+ *
+ * Space vector PWM implementation, based on these sources:
  * https://software-dl.ti.com/processor-industrial-sw/esd/motor_control_sdk/am243x/2025_00_00_06/docs/api_guide_am243x/svgen_8h_source.html
  * https://imperix.com/doc/implementation/svpwm-vs-spwm-modulation-techniques
  * https://www.microchip.com/content/dam/mchp/documents/OTH/ApplicationNotes/ApplicationNotes/00955a.pdf
