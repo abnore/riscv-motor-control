@@ -19,5 +19,6 @@ $(BIN): $(OBJS)
 
 clean:
 	rm -f $(BIN) $(OBJS)
+	rm *.log
 
 .PHONY: all clean

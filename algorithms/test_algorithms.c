@@ -3,12 +3,13 @@
 #include "motor_control.h"
 
 
+const char* filename = "output.log";
 /* A test program for the clark/park transform on a motor with 120deg phase
  * split in a 3 phase system. */
 
 int main(void)
 {
-    FILE *fp = fopen("output.log", "w");
+    FILE *fp = fopen(filename, "w");
 
     float current_peak = 10.f; // in mA or uA, whatever
     float current_offset = PI_F / 2.f; // gives a 90deg offset dq=0,10
@@ -102,6 +103,7 @@ int main(void)
                 (step + 1) * dt, target, current, voltage, pi.integral);
     }
 
+    printf("Created %s with test results.\n", filename);
     fclose(fp);
     return 0;
 }

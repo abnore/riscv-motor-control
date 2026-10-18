@@ -1,1 +1,20 @@
+# Compiled executables
+*.elf
+*.bin
+*.o
+
+# Build directories
+build/
+
+# Algorithm test executable
 /algorithms/test_algorithms
+
+# NEORV32 generated memory images
+/neorv32_imem_image.vhd
+/neorv32_dmem_image.vhd
+
+# Simulation outputs
+*.vcd
+*.ghw
+*.fst
+*.log
