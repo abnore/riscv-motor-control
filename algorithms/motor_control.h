@@ -24,6 +24,14 @@ typedef struct {
     float b;
 } ab_vector;
 
+/* Struct for the space vector modulation, creating a 3 phase output, and
+ * also used by inverse Clarke*/
+typedef struct {
+    float a;
+    float b;
+    float c;
+} three_phase;
+
 /* Struct for holding the D and Q vectors in the stationary domain that is
 * created by the park transform */
 typedef struct {
@@ -31,11 +39,15 @@ typedef struct {
     float q;
 } dq_vector;
 
-ab_vector clarke_transform(float i_a, float i_b, float i_c);
+
+ab_vector clarke_transform(three_phase tp);
+three_phase inverse_clarke_transform(ab_vector ab);
 dq_vector park_transform(float theta_rad, ab_vector ab);
 ab_vector inverse_park_transform(float theta_rad, dq_vector dq);
+three_phase svpwm(ab_vector ab, float dc_bus);
 
-/* Struct for a PI controller, used for both the D and Q vectors */
+/* Struct for a PI controller
+ * Used for both the D and Q vectors */
 typedef struct {
     float kp; // proportional gain
     float ki; // integral gain
@@ -48,4 +60,21 @@ typedef struct {
 // PI controller function, will output a voltage
 float pi_update(PI_control *pi, float target, float measured, float dt);
 
+/* Struct for a motor controller */
+typedef struct {
+    PI_control pi_d;
+    PI_control pi_q;
+} motor_controller;
+
+/* Currents in amps, dc_bus in volts, dt in seconds.
+ * rotor_angle is the electrical angle in radians.
+ * We have to have dc_bus > 0 and also dt > 0
+ */
+three_phase motor_control_update(
+    motor_controller *controller,
+    three_phase measured_currents,
+    dq_vector target_currents,
+    float rotor_angle,
+    float dc_bus,
+    float dt);
 #endif //MOTOR_CTRL_H

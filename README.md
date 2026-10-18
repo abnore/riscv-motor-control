@@ -6,9 +6,11 @@ This repository contains my algorithms, tests, and hardware experiments.
 
 ## Clone
 
+```bash
 git clone --recurse-submodules https://github.com/abnore/riscv-motor-control.git
+```
 
 ## Status
 
 >[!NOTE]
->Work in progress. Currently implementing and testing Clarke and Park transforms.
+> Work in progress. Motor control algorithm needs testing, then hardware testing
