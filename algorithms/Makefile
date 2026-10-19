@@ -4,27 +4,23 @@ ifeq ($(shell uname -s),Linux)
 	LDLIBS += -lm
 endif
 
-BIN = test_algorithms
 CFILES := $(wildcard *.c)
-OBJS := $(filter-out test_%.c, $(CFILES:.c=.o))
+TEST_FILES := $(wildcard test_*.c)
+BINS := $(TEST_FILES:.c=)
 
-# Modify makefile, such that i dont have to do this, but can compile all tests
-# independant
-#	cc -std=c11 -Wall -Wextra -O2 \
-#	    test_motor_control.c motor_control.c clarke_park.c pi_control.c svpwm.c \
-#	    -lm -o test_motor_control
-#	
-#	./test_motor_control
-all: $(BIN)
+LIB_FILES := $(filter-out $(TEST_FILES),$(CFILES))
+LIB_OBJS := $(LIB_FILES:.c=.o)
+TEST_OBJS := $(TEST_FILES:.c=.o)
 
-$(BIN): $(OBJS)
-	$(CC) -o $@ $^ $(LDLIBS)
+all: $(BINS)
 
-%.o: %.c algorithms.h
+$(BINS): %: %.o $(LIB_OBJS)
+	$(CC) $(CFLAGS) -o $@ $^ $(LDLIBS)
+
+%.o: %.c motor_control.h
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm -f $(BIN) $(OBJS)
-	rm *.log
+	rm -f $(BINS) $(LIB_OBJS) $(TEST_OBJS) *.log
 
 .PHONY: all clean
