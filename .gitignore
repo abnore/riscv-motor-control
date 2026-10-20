@@ -18,3 +18,24 @@ build/
 *.ghw
 *.fst
 *.log
+
+# Vivado
+.Xil/
+*.cache/
+*.runs/
+*.gen/
+*.hw/
+*.ip_user_files/
+*.sim/
+*.tmp/
+*.srcs/
+
+# Vivado generated files
+*.jou
+*.str
+*.pb
+*.wdb
+*.wcfg
+*.dcp
+*.bit
+*.ltx
