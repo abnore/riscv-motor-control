@@ -14,14 +14,15 @@ architecture rtl of motor_control is
     signal rstn : std_logic;
     signal gpio_out : std_ulogic_vector(31 downto 0);
 
-attribute mark_debug : string;
-attribute mark_debug of gpio_out : signal is "true";
+    -- This allowed the ILA to hook into these signals, to read out "cycles"
+    attribute mark_debug : string;
+    attribute mark_debug of gpio_out : signal is "true";
 
 begin
 
     rstn <= not rst;
 
-cpu_inst : entity neorv32.neorv32_top
+    cpu_inst : entity neorv32.neorv32_top
     generic map (
         CLOCK_FREQUENCY => 100_000_000,
         BOOT_MODE_SELECT => 2,
@@ -33,10 +34,11 @@ cpu_inst : entity neorv32.neorv32_top
         DMEM_EN => true,
         DMEM_SIZE => 16 * 1024,
         IO_GPIO_NUM => 32,
+
         -- CPU execution
         CPU_FAST_MUL_EN   => true,
         CPU_FAST_SHIFT_EN => true,
-        CPU_FAST_MUL_REGS => 1, 
+        CPU_FAST_MUL_REGS => 1,
 
         -- Memory timing
         IMEM_OUTREG_EN => false,
@@ -45,7 +47,7 @@ cpu_inst : entity neorv32.neorv32_top
     port map (
         clk_i       => clk,
         rstn_i      => rstn,
-       
+
         -- have to list out all outputs to set it open
         uart0_txd_o => open,
         rstn_ocd_o => open,

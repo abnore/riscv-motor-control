@@ -57,7 +57,7 @@ typedef struct {
     float out_max; // windup max
 } PI_control;
 
-// PI controller function, will output a voltage
+/* PI controller function, will output a voltage */
 float pi_update(PI_control *pi, float target, float measured, float dt);
 
 /* Struct for a motor controller */
@@ -77,4 +77,6 @@ three_phase motor_control_update(
     float rotor_angle,
     float dc_bus,
     float dt);
+
+
 #endif //MOTOR_CTRL_H
